@@ -117,6 +117,13 @@ async def remove_feed(update: Update, context: ContextTypes.DEFAULT_TYPE):
     remove_feed_from_db(url)
     await update.message.reply_text(f"🗑️ Silindi: {url}")
 
+async def test_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        await context.bot.send_message(chat_id=CHANNEL_ID, text="🔔 Bu bir test mesajıdır.")
+        await update.message.reply_text(f"Test mesajı {CHANNEL_ID} kanalına gönderildi.")
+    except Exception as e:
+        await update.message.reply_text(f"Mesaj gönderilemedi: {e}")
+
 # --- ARKA PLAN GÖREVİ (JOB) ---
 
 async def check_feeds_job(context: ContextTypes.DEFAULT_TYPE):
@@ -158,6 +165,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('add', add_feed))
     application.add_handler(CommandHandler('list', list_feeds))
     application.add_handler(CommandHandler('remove', remove_feed))
+    application.add_handler(CommandHandler('test', test_message))
     
     # Zamanlanmış görevi ekle (JobQueue)
     job_queue = application.job_queue
